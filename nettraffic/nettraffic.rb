@@ -18,7 +18,7 @@ end
 
 configure :nettraffic do |s|
   s.interval = 1
-  s.iface_name = "ppp0" #User MUST specify this, how?
+  s.config[:iface_name] || "eth0"
   s.last_counters = read_byte_counters(s.iface_name)
 end
 
