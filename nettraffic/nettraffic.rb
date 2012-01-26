@@ -24,8 +24,8 @@ end
 
 on :run do |s|
   current_counters = read_byte_counters(s.iface_name)
-  rx_speed = (current_counters[0] - s.last_counters[0])/1000
-  tx_speed = (current_counters[1] - s.last_counters[1])/1000
+  rx_speed = (current_counters[0] - s.last_counters[0])/1000/s.interval
+  tx_speed = (current_counters[1] - s.last_counters[1])/1000/s.interval
   s.last_counters = current_counters
   s.data = "D:#{rx_speed} KB/s U:#{tx_speed} KB/s"
 end
