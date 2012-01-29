@@ -2,23 +2,15 @@
 # Created with sur-0.2
 helper do
   def read_byte_counters(iface_name)
-    rx_bytes = 0
-    tx_bytes = 0
-    res = IO.readlines("/proc/net/dev")
-    res.each do |l|
-      if l.scan(iface_name).size == 1
-        rx_bytes = l.split[1].to_i
-        tx_bytes = l.split[9].to_i
-        break
-      end
-    end
+    rx_bytes = IO.readlines("/sys/class/net/#{iface_name}/statistics/rx_bytes")[0].to_i
+    tx_bytes = IO.readlines("/sys/class/net/#{iface_name}/statistics/tx_bytes")[0].to_i
     return rx_bytes, tx_bytes
   end
 end
 
 configure :nettraffic do |s|
   s.interval = 1
-  s.iface_name = s.config[:iface_name] || "eth0"
+  s.iface_name = s.config[:iface_name] || "wlan0"
   s.last_counters = read_byte_counters(s.iface_name)
 end
 
